@@ -4,19 +4,30 @@ const mediaHandler = require('./mediaResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
+// const requestHandler = {
+//   '/': htmlHandler.getIndex,
+//   '/page2': htmlHandler.getPage2,
+//   '/page3': htmlHandler.getpage3,
+//   '/party.mp4': mediaHandler.getParty,
+//   '/bird.mp4': mediaHandler.getBird,
+//   '/bling.mp3': mediaHandler.getBling,
+//   default: htmlHandler.getIndex,
+// };
+
 const requestHandler = {
-  '/': htmlHandler.getIndex,
-  '/page2': htmlHandler.getPage2,
+  '/': htmlHandler.loadPage('index'),
+  '/page2': htmlHandler.loadPage('2'),
+  '/page3': htmlHandler.loadPage('3'),
   '/party.mp4': mediaHandler.getParty,
   '/bird.mp4': mediaHandler.getBird,
-  default: htmlHandler.getIndex,
+  '/bling.mp3': mediaHandler.getBling,
+  default: htmlHandler.loadPage('index'),
 };
 
 const onRequest = (request, response) => {
   // console.log(request);
 
   const parsedUrl = new URL(request.url, `http://localhost:${port}`);
-  const acceptedTypes = request.headers.accept.split(',');
   const handler = requestHandler[parsedUrl.pathname];
 
   if (handler) handler(request, response);
@@ -24,5 +35,5 @@ const onRequest = (request, response) => {
 };
 
 http.createServer(onRequest).listen(port, () => {
-  console.log(`Listening on 127.0.0.1:${port}`);
+  // console.log(`Listening on 127.0.0.1:${port}`);
 });
